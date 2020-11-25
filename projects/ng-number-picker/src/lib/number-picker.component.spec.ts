@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { NumberPickerComponent } from './number-picker.component';
@@ -8,7 +8,7 @@ describe('NumberPickerComponent', () => {
   let component: NumberPickerComponent;
   let fixture: ComponentFixture<NumberPickerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ FormsModule ],
       providers: [NumberPickerService],

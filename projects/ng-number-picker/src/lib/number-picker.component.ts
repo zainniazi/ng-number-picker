@@ -1,54 +1,96 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
-import { buttonsOrientationType, sizeType, CustomClasses } from './number-picker.config';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import {
+  buttonsOrientationType,
+  sizeType,
+  CustomClasses,
+} from './number-picker.config';
 import { NumberPickerService } from './number-picker.service';
 
 @Component({
   selector: 'ng-number-picker',
   template: `
-  <div class="input-group mb-3 input-{{size}} {{customClass.container}}">
-  <!-- Horizontal decrease button orientation -->
-  <div class="input-group-prepend" *ngIf="isHorizontal() && showDownButton">
-    <span class="input-group-text decrease {{customClass.down}}" (click)="onDecrease($event)"
-    (mouseup)="onMouseUp($event, false)" (mousedown)="onMouseDown($event, false)">-</span>
-  </div>
-  <!-- Input prefix -->
-  <div *ngIf="prefix" class="input-group-prepend">
-    <span class="input-group-text {{customClass.prefix}}">{{prefix}}</span>
-  </div>
-  <input type="number" class="form-control" name="input-spin-val"
-  [(ngModel)]="value"
-  [readOnly]="inputReadOnly"
-  (blur)="onBlur($event)"
-  (focus)="onFocus($event)"
-  (mousewheel)="mouseWheel && onMouseWheel($event)"
-  (keyup)="arrowKeys && onKeyUp($event)"
-  (keydown)="arrowKeys && onKeyDown($event)"
-  (keydown.arrowup)="arrowKeys && onIncrease($event)"
-  (keydown.arrowdown)="arrowKeys && onDecrease($event)"
-  (change)="onValueChange($event)"
-  [placeholder]="placeholder"
-  >
-  <!-- Input postfix -->
-  <div *ngIf="postfix" class="input-group-prepend">
-    <span class="input-group-text {{customClass.postfix}}" [style.borderLeft]="'0'">{{postfix}}</span>
-  </div>
-  <!-- Horizontal increase button orientation -->
-  <div class="input-group-prepend" *ngIf="isHorizontal() && showUpButton">
-    <span class="input-group-text increase {{customClass.up}}" [style.borderLeft]="(!postfix) ? '0' : ''" (click)="onIncrease($event)"
-    (mouseup)="onMouseUp($event)" (mousedown)="onMouseDown($event)">+</span>
-  </div>
-  <!-- Vertical buttons orientation -->
-  <div class="input-group-append" *ngIf="!isHorizontal()">
-    <span class="input-group-text vertical p-0">
-      <span *ngIf="showUpButton" class="{{customClass.up}}" (click)="onIncrease($event)" (mouseup)="onMouseUp($event)"
-      (mousedown)="onMouseDown($event)">+</span>
-      <span *ngIf="showDownButton" class="{{customClass.down}}" (click)="onDecrease($event)" (mouseup)="onMouseUp($event, false)"
-      (mousedown)="onMouseDown($event, false)">-</span>
-    </span>
-  </div>
-</div>
+    <div class='input-group mb-3 input-{{ size }} {{ customClass.container }}'>
+      <!-- Horizontal decrease button orientation -->
+      <div class='input-group-prepend' *ngIf='isHorizontal() && showDownButton'>
+        <span
+          class='input-group-text decrease {{ customClass.down }}'
+          (click)='onDecrease($event)'
+          (mouseup)='onMouseUp($event, false)'
+          (mousedown)='onMouseDown($event, false)'
+          >-</span
+        >
+      </div>
+      <!-- Input prefix -->
+      <div *ngIf='prefix' class='input-group-prepend'>
+        <span class='input-group-text {{ customClass.prefix }}'>{{
+          prefix
+        }}</span>
+      </div>
+      <input
+        type='number'
+        class='form-control'
+        name='input-spin-val'
+        [(ngModel)]='value'
+        [readOnly]='inputReadOnly'
+        (blur)='onBlur($event)'
+        (focus)='onFocus($event)'
+        (mousewheel)='mouseWheel && onMouseWheel($event)'
+        (keyup)='arrowKeys && onKeyUp($event)'
+        (keydown)='arrowKeys && onKeyDown($event)'
+        (keydown.arrowup)='arrowKeys && onIncrease($event)'
+        (keydown.arrowdown)='arrowKeys && onDecrease($event)'
+        (change)='onValueChange($event)'
+        [placeholder]='placeholder'
+      />
+      <!-- Input postfix -->
+      <div *ngIf='postfix' class='input-group-prepend'>
+        <span
+          class='input-group-text {{ customClass.postfix }}'
+          [style.borderLeft]=''0''
+          >{{ postfix }}</span
+        >
+      </div>
+      <!-- Horizontal increase button orientation -->
+      <div class='input-group-prepend' *ngIf='isHorizontal() && showUpButton'>
+        <span
+          class='input-group-text increase {{ customClass.up }}'
+          [style.borderLeft]='!postfix ? '0' : '''
+          (click)='onIncrease($event)'
+          (mouseup)='onMouseUp($event)'
+          (mousedown)='onMouseDown($event)'
+          >+</span
+        >
+      </div>
+      <!-- Vertical buttons orientation -->
+      <div class='input-group-append' *ngIf='!isHorizontal()'>
+        <span class='input-group-text vertical p-0'>
+          <span
+            *ngIf='showUpButton'
+            class='{{ customClass.up }}'
+            (click)='onIncrease($event)'
+            (mouseup)='onMouseUp($event)'
+            (mousedown)='onMouseDown($event)'
+            >+</span
+          >
+          <span
+            *ngIf='showDownButton'
+            class='{{ customClass.down }}'
+            (click)='onDecrease($event)'
+            (mouseup)='onMouseUp($event, false)'
+            (mousedown)='onMouseDown($event, false)'
+            >-</span
+          >
+        </span>
+      </div>
+    </div>
   `,
-  styleUrls: ['./number-picker.css']
+  styleUrls: ['./number-picker.css'],
 })
 export class NumberPickerComponent implements OnInit {
   private precision: number;
@@ -83,14 +125,16 @@ export class NumberPickerComponent implements OnInit {
   @Output() pickDownStarted: EventEmitter<boolean> = new EventEmitter();
   @Output() pickDownStoped: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private numberPickerService: NumberPickerService) { }
+  constructor(private numberPickerService: NumberPickerService) {}
 
   ngOnInit() {
     this.initPicker();
   }
 
   isHorizontal(): boolean {
-    return (this.buttonsOrientation !== 'v' && this.buttonsOrientation !== 'vertical');
+    return (
+      this.buttonsOrientation !== 'v' && this.buttonsOrientation !== 'vertical'
+    );
   }
 
   onFocus(event: FocusEvent) {
@@ -105,7 +149,7 @@ export class NumberPickerComponent implements OnInit {
     this.isInputFocused = false;
   }
 
-  onMouseWheel(event: MouseWheelEvent) {
+  onMouseWheel(event: WheelEvent) {
     if (this.isInputFocused) {
       event.preventDefault();
       let wheelUp = null;
@@ -147,10 +191,12 @@ export class NumberPickerComponent implements OnInit {
     }
   }
 
-  onDecrease(event: MouseEvent | MouseWheelEvent | KeyboardEvent) {
+  onDecrease(event: MouseEvent | WheelEvent | KeyboardEvent) {
     event.preventDefault();
     if (this.canDecrease()) {
-      this.value = this.round((this.value > this.min) ? this.value -= this.step : this.value);
+      this.value = this.round(
+        this.value > this.min ? (this.value -= this.step) : this.value
+      );
       this.valueChange.emit(this.value);
     } else {
       this.minReached.emit(true);
@@ -158,10 +204,12 @@ export class NumberPickerComponent implements OnInit {
     event.stopPropagation();
   }
 
-  onIncrease(event: MouseEvent | MouseWheelEvent | KeyboardEvent) {
+  onIncrease(event: MouseEvent | WheelEvent | KeyboardEvent) {
     event.preventDefault();
     if (this.canIncrease()) {
-      this.value = this.round((this.value < this.max) ? this.value += this.step : this.value);
+      this.value = this.round(
+        this.value < this.max ? (this.value += this.step) : this.value
+      );
       this.valueChange.emit(this.value);
     } else {
       this.maxReached.emit(true);
@@ -173,11 +221,11 @@ export class NumberPickerComponent implements OnInit {
     this.afterMouseDown(increase, event);
   }
 
-  private isArrowUpDown(keyCode: number): boolean {
+  private isArrowUpDown(keyCode: number | string): boolean {
     return keyCode === 38 || keyCode === 40;
   }
 
-  private isArowUp(keyCode: number): boolean {
+  private isArowUp(keyCode: number | string): boolean {
     return keyCode === 38;
   }
 
@@ -199,26 +247,40 @@ export class NumberPickerComponent implements OnInit {
   }
 
   onKeyDown(event: KeyboardEvent) {
-    if (this.isArrowUpDown(event.keyCode)) {
+    let keyCode: string | number;
+    if (event.key !== undefined) {
+      keyCode = event.key;
+    } else if (event.keyCode !== undefined) {
+      keyCode = event.keyCode;
+    }
+
+    if (this.isArrowUpDown(keyCode)) {
       event.preventDefault();
       if (!this.eventHolder) {
-        this.loopPick(this.isArowUp(event.keyCode), event);
+        this.loopPick(this.isArowUp(keyCode), event);
       }
     }
     event.stopPropagation();
   }
 
   onKeyUp(event: KeyboardEvent) {
-    if (this.isArrowUpDown(event.keyCode)) {
+    let keyCode: string | number;
+    if (event.key !== undefined) {
+      keyCode = event.key;
+    } else if (event.keyCode !== undefined) {
+      keyCode = event.keyCode;
+    }
+
+    if (this.isArrowUpDown(keyCode)) {
       event.preventDefault();
-      this.afterPick(this.isArowUp(event.keyCode));
+      this.afterPick(this.isArowUp(keyCode));
     }
     event.stopPropagation();
   }
 
   private afterMouseDown(up: boolean, event: MouseEvent) {
     event.preventDefault();
-    if (this.isLeftClick(event.which)) {
+    if (this.isLeftClick(event.button)) {
       this.loopPick(up, event);
     }
     event.stopPropagation();
@@ -242,7 +304,11 @@ export class NumberPickerComponent implements OnInit {
     this.countInterval = null;
   }
 
-  private afterArrowKeysPressed(up: boolean, event: KeyboardEvent, start: boolean) {
+  private afterArrowKeysPressed(
+    up: boolean,
+    event: KeyboardEvent,
+    start: boolean
+  ) {
     if (start) {
       this.loopPick(up, event);
     } else {
@@ -263,11 +329,14 @@ export class NumberPickerComponent implements OnInit {
   }
 
   private round(value: number): number {
-    return Math.round(value * Math.pow(10, this.precision)) / Math.pow(10, this.precision);
+    return (
+      Math.round(value * Math.pow(10, this.precision)) /
+      Math.pow(10, this.precision)
+    );
   }
 
   private canIncrease(): boolean {
-    const canIncrease = (this.value <= this.max - this.step);
+    const canIncrease = this.value <= this.max - this.step;
     if (!canIncrease) {
       this.value = this.max;
     }
@@ -275,7 +344,7 @@ export class NumberPickerComponent implements OnInit {
   }
 
   private canDecrease(): boolean {
-    const canDecrease = (this.value >= this.min + this.step);
+    const canDecrease = this.value >= this.min + this.step;
     if (!canDecrease) {
       this.value = this.min;
     }
@@ -319,11 +388,14 @@ export class NumberPickerComponent implements OnInit {
     this.max = this.parseVal(this.max) || this.numberPickerService.max;
     this.step = this.parseVal(this.step) || this.numberPickerService.step;
     this.value = this.parseVal(this.value) || this.numberPickerService.value;
-    this.pickStartAfter = this.parseVal(this.pickStartAfter) || this.numberPickerService.pickStartAfter;
-    this.pickTimer = this.parseVal(this.pickTimer) || this.numberPickerService.pickTimer;
-    this.precision = this.getPrecision(this.step) || this.numberPickerService.precision;
+    this.pickStartAfter =
+      this.parseVal(this.pickStartAfter) ||
+      this.numberPickerService.pickStartAfter;
+    this.pickTimer =
+      this.parseVal(this.pickTimer) || this.numberPickerService.pickTimer;
+    this.precision =
+      this.getPrecision(this.step) || this.numberPickerService.precision;
     this.value = this.round(this.value);
     this.placeholder = this.placeholder !== undefined ? this.placeholder : '';
   }
-
 }
